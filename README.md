@@ -1,2 +1,2 @@
-# employee-crud-api
-Employee CRUD sample API project
+# employee_management
+Sample Employee Management Application to perform CRUD
