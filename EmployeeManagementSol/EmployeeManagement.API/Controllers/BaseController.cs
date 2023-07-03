@@ -9,11 +9,13 @@ namespace EmployeeManagement.API.Controllers
 
         public string UserId { get => "system_admin"; }
 
+        [NonAction]
         public IActionResult Result<T>(ResultModel<T> pResult)
         {
             return WriteResponse(pResult.Code, pResult.Data, pResult.Message);
         }
 
+        [NonAction]
         public IActionResult Result(ResultModel<bool> pResult)
         {
             if (pResult?.Status != true || pResult?.Data != true)
