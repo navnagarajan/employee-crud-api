@@ -72,7 +72,7 @@ namespace EmployeeManagement.Application
                     return result = ConflictResult("Mobile required!");
                 }
 
-                if (IsValidDate(pModel?.DateOfBirth))
+                if (IsValidDate(pModel?.DateOfBirth) != true)
                 {
                     _logger.LogDebug("Invalid email!");
                     return result = ConflictResult("Date of birth required!");

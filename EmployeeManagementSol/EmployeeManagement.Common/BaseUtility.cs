@@ -14,12 +14,12 @@ namespace EmployeeManagement.Common
 
         public bool IsValid(params string?[] pArgs)
         {
-            return !(pArgs?.Any(A => string.IsNullOrWhiteSpace(A?.Trim())) != true);
+            return !(pArgs?.Any(A => string.IsNullOrWhiteSpace(A?.Trim())) != false);
         }
 
         public bool IsValidMobile(string? pMobile)
         {
-            return !((pMobile?.Length ?? -1) < 10 || pMobile!.Any(A => char.IsDigit(A) != true));
+            return !((pMobile?.Length ?? -1) < 10 || pMobile!.Any(A => char.IsDigit(A) != false));
         }
 
         public bool IsValidDate(DateTime? pDateTime)
