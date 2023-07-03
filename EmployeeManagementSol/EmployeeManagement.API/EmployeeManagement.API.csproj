@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeeManagement.Application\EmployeeManagement.Application.csproj" />
+    <ProjectReference Include="..\EmployeeManagement.Common\EmployeeManagement.Common.csproj" />
+    <ProjectReference Include="..\EmployeeManagement.Context\EmployeeManagement.Context.csproj" />
+    <ProjectReference Include="..\EmployeeManagement.Repository\EmployeeManagement.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
