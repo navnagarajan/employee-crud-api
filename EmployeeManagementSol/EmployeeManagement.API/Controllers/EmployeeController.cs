@@ -19,6 +19,7 @@ namespace EmployeeManagement.API.Controllers
         [HttpGet, Route("list")]
         public async Task<IActionResult> AllEmployees()
         {
+            _logger.LogInformation($"Requested received: AllEmployees");
             var result = await _employeeService.AllEmployee();
             return Result(result);
         }
@@ -26,6 +27,7 @@ namespace EmployeeManagement.API.Controllers
         [HttpPost, Route("manage")]
         public async Task<IActionResult> Manage(EmployeeModel pModel)
         {
+            _logger.LogInformation($"Requested received: Manage");
             if (pModel == null)
             {
                 return BadRequest();
