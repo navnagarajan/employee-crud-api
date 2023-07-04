@@ -26,5 +26,20 @@
                                                     @LastUpdatedBy,
                                                     @LastUpdatedOn); 
                                                 SELECT LAST_INSERT_ID();";
+
+        public const string UpdateEmployee = @"UPDATE
+                                                   employee
+                                               SET
+                                                   FirstName = @FirstName,
+                                                   LastName = @LastName,
+                                                   Email = @Email,
+                                                   Mobile = @Mobile,
+                                                   DateOfBirth = @DateOfBirth,
+                                                   IsActive = @IsActive,
+                                                   IsDeleted = @IsDeleted,
+                                                   LastUpdatedBy = @LastUpdatedBy,
+                                                   LastUpdatedOn = @LastUpdatedOn
+                                               WHERE
+                                                   EmployeeId = @EmployeeId";
     }
 }

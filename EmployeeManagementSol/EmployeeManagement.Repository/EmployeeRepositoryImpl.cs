@@ -30,6 +30,20 @@ namespace EmployeeManagement.Repository
             }
         }
 
+        public async Task<bool> UpdateEmployee(EmployeeEntity pEnity, IDbConnection pConnection, IDbTransaction pTransaction)
+        {
+            try
+            {
+                var modifiedRecordCount = await pConnection.ExecuteAsync(EmployeeQuery.UpdateEmployee, pEnity, pTransaction);
+                return modifiedRecordCount == 1;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Error on UpdateEmployee. Entity: {Serialize(pEnity)}");
+                return false;
+            }
+        }
+
         public async Task<IReadOnlyList<EmployeeEntity>> AllEmployee(IDbConnection pConnection)
         {
             try
