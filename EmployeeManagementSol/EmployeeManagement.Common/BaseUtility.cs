@@ -19,7 +19,7 @@ namespace EmployeeManagement.Common
 
         public bool IsValidMobile(string? pMobile)
         {
-            return !((pMobile?.Length ?? -1) < 10 || pMobile!.Any(A => char.IsDigit(A) != false));
+            return !((pMobile?.Length ?? -1) < 10 || pMobile!.Any(A => !char.IsDigit(A)));
         }
 
         public bool IsValidDate(DateTime? pDateTime)
@@ -46,5 +46,8 @@ namespace EmployeeManagement.Common
 
         public ResultModel<bool> BadRequestErrorResult(string pMessage = "BAD_REQUEST_ERROR") => new(false, false, ResultCode.Status400BadRequest, pMessage);
         public ResultModel<T> BadRequestErrorResult<T>(string pMessage = "BAD_REQUEST_ERROR") => new(false, default, ResultCode.Status400BadRequest, pMessage);
+
+        public ResultModel<bool> NotFoundResult(string pMessage = "NOT_FOUND_ERROR") => new(false, false, ResultCode.Status404NotFound, pMessage);
+        public ResultModel<T> NotFoundResult<T>(string pMessage = "NOT_FOUND_ERROR") => new(false, default, ResultCode.Status404NotFound, pMessage);
     }
 }

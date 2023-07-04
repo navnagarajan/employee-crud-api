@@ -1,4 +1,5 @@
-﻿using EmployeeManagement.Context.Employee;
+﻿using EmployeeManagement.API.Models;
+using EmployeeManagement.Context.Employee;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.API.Controllers
@@ -25,15 +26,16 @@ namespace EmployeeManagement.API.Controllers
         }
 
         [HttpPost, Route("manage")]
-        public async Task<IActionResult> Manage(EmployeeModel pModel)
+        public async Task<IActionResult> Manage(ManageEmployeePayload pPayload)
         {
             _logger.LogInformation($"Requested received: Manage");
-            if (pModel == null)
+            if (pPayload == null)
             {
                 return BadRequest();
             }
 
-            var result = await _employeeService.ManageEmployee(UserId, pModel);
+            var model = ExpressMapper.Mapper.Map<ManageEmployeePayload, EmployeeModel>(pPayload);
+            var result = await _employeeService.ManageEmployee(UserId, model);
             return Result(result);
         }
     }

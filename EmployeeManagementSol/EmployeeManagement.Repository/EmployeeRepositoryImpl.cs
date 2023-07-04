@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EmployeeManagement.Common;
+using EmployeeManagement.Common.Models;
 using EmployeeManagement.Context.Employee;
 using EmployeeManagement.Repository.QueryConstants;
 using Microsoft.Extensions.Logging;
@@ -55,6 +56,48 @@ namespace EmployeeManagement.Repository
             {
                 _logger.LogError(exception, "Error on AllEmployee");
                 return new List<EmployeeEntity>();
+            }
+        }
+
+        public async Task<ResultModel<string>> LastEmployeeNumber(IDbConnection pConnection)
+        {
+            try
+            {
+                var employeeNumber = await pConnection.QueryFirstOrDefaultAsync<string>(EmployeeQuery.LastEnrollNumber);
+                return OkayResult<string>(employeeNumber);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Error on LastEmployeeNumber");
+                return InternalServerErrorResult<string>();
+            }
+        }
+
+        public async Task<ResultModel<EmployeeEntity>> GetByEmail(string pEmail, IDbConnection pConnection)
+        {
+            try
+            {
+                var employee = await pConnection.QueryFirstOrDefaultAsync<EmployeeEntity>(EmployeeQuery.ByEmail, new { Email = pEmail });
+                return employee == null ? NotFoundResult<EmployeeEntity>() : OkayResult(employee);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Error on GetByEmail");
+                return InternalServerErrorResult<EmployeeEntity>();
+            }
+        }
+
+        public async Task<ResultModel<EmployeeEntity>> GetByMobile(string pMobile, IDbConnection pConnection)
+        {
+            try
+            {
+                var employee = await pConnection.QueryFirstOrDefaultAsync<EmployeeEntity>(EmployeeQuery.ByMobile, new { Mobile = pMobile });
+                return employee == null ? NotFoundResult<EmployeeEntity>() : OkayResult(employee);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Error on GetByMobile");
+                return InternalServerErrorResult<EmployeeEntity>();
             }
         }
     }
