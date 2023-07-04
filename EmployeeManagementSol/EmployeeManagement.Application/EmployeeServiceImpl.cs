@@ -86,16 +86,29 @@ namespace EmployeeManagement.Application
                 using var connection = _databaseManager.Connection;
                 using var transaction = connection.BeginTransaction();
 
-                var employeeId = await _employeeRepository.AddNew(entity, connection, transaction);
-
-                if (employeeId < 1)
+                if (entity.EmployeeId < 1)
                 {
-                    _logger.LogWarning($"Failed to create new employee with following data : {Serialize(entity)}");
-                    return result = NotModifiedResult();
+                    var employeeId = await _employeeRepository.AddNew(entity, connection, transaction);
+
+                    if (employeeId < 1)
+                    {
+                        _logger.LogWarning($"Failed to create new employee with following data : {Serialize(entity)}");
+                        return result = NotModifiedResult();
+                    }
+                }
+                else
+                {
+                    var isSuccess = await _employeeRepository.UpdateEmployee(entity, connection, transaction);
+
+                    if (isSuccess != true)
+                    {
+                        _logger.LogWarning($"Failed to update employee with following data : {Serialize(entity)}");
+                        return result = NotModifiedResult();
+                    }
                 }
 
                 transaction.Commit();
-                _logger.LogInformation($"Employee '{pModel!.FullName}' added with id {employeeId}");
+                _logger.LogInformation($"Employee '{pModel!.FullName}' changes recorded");
                 return result = OkayResult($"Employee '{pModel!.FullName}' added successfully");
             }
             catch (Exception exception)
