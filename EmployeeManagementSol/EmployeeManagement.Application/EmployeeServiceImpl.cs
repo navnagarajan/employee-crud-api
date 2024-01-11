@@ -66,7 +66,7 @@ namespace EmployeeManagement.Application
                     return result = ConflictResult("Email required!");
                 }
 
-                if (IsValidMobile(pModel?.Mobile))
+                if (IsValidMobile(pModel?.Mobile) != true)
                 {
                     _logger.LogDebug("Invalid email!");
                     return result = ConflictResult("Mobile required!");
@@ -86,8 +86,47 @@ namespace EmployeeManagement.Application
                 using var connection = _databaseManager.Connection;
                 using var transaction = connection.BeginTransaction();
 
+                var empByEmailResult = await _employeeRepository.GetByEmail(pModel!.Email, connection);
+
+                if (empByEmailResult?.Code != ResultCode.Status404NotFound && empByEmailResult?.Data?.EmployeeId != pModel.EmployeeId)
+                {
+                    return result = ConflictResult("Email already exist");
+                }
+
+                var empByMobileResult = await _employeeRepository.GetByMobile(pModel!.Mobile, connection);
+
+                if (empByMobileResult?.Code != ResultCode.Status404NotFound && empByMobileResult?.Data?.EmployeeId != pModel.EmployeeId)
+                {
+                    return result = ConflictResult("Mobile already exist");
+                }
+
                 if (entity.EmployeeId < 1)
                 {
+                    var lastEnrollNumberResult = await _employeeRepository.LastEmployeeNumber(connection);
+
+                    if (lastEnrollNumberResult?.Status != true)
+                    {
+                        return result = NotModifiedResult();
+                    }
+
+                    var enrollNumber = string.Empty;
+
+                    if (IsValid(lastEnrollNumberResult.Data?.Trim()))
+                    {
+                        if (!int.TryParse(lastEnrollNumberResult.Data, out int lastEnrollNum))
+                        {
+                            return result = NotModifiedResult();
+                        }
+
+                        enrollNumber = (++lastEnrollNum).ToString().PadLeft(6, '0');
+                    }
+                    else
+                    {
+                        enrollNumber = "000001";
+                    }
+
+                    entity.EnrollNumber = enrollNumber;
+
                     var employeeId = await _employeeRepository.AddNew(entity, connection, transaction);
 
                     if (employeeId < 1)
